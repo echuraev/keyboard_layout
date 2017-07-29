@@ -75,6 +75,8 @@ git clone https://github.com/echuraev/keyboard_layout
 `add_additional_layout(layout_name, keymap_name, layout_image)` - this function adds additional layout to the widget.
 
 ## Screenshots
+In the beginning of both screen casts I changed layouts by keyboard shortcats and only primary layouts were switched. After that I showed how additional layouts work.
+
 Usage of gui_layout:
 ![Usage of gui_layout.gif](gui_usage.gif)
 
