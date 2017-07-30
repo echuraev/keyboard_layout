@@ -60,6 +60,26 @@ git clone https://github.com/echuraev/keyboard_layout
        awful.key({"Mod1"}, "Shift_L", function () kbdcfg.switch() end)
    )
    ```
+5. Add widget to your wibar:
+   ```
+   s.mywibox = awful.wibar({ position = "top", screen = s })
+
+   -- Add widgets to the wibox
+   s.mywibox:setup {
+       layout = wibox.layout.align.horizontal,
+       { -- Left widgets
+           -- ...
+       },
+       { -- Middle widgets
+           -- ...
+       },
+       { -- Right widgets
+           -- ...
+           kbdcfg.widget,
+           -- ...
+       },
+   }
+   ```
 
 ## Functions
 `switch()` - this function switch one primary keyboard layout to the next primary layout.
