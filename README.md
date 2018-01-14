@@ -17,16 +17,19 @@ git clone https://github.com/echuraev/keyboard_layout
    ```
    local keyboard_layout = require("keyboard_layout")
    ```
-2. Create instance of keyboard widget. You can choose between text and graphical layout label, see below. Primary layout you can set by passing it to the `tui_layout` or `gui_layout` functions. After, you can call some other functions e.g. `add_additional_layout` for setting some additional layouts. And when you add all necessary options to `kbdcfg` then you have to call `bind` functions. In this call all your settings will apply.
+
+2. Create instance of keyboard widget. You can choose between text and graphical
+   layout label, see below. Primary and Additional layouts can be set by
+   `add_primary_layout` and `add_additional_layout` respectively. And when you
+   add all necessary options to `kbdcfg` then you have to call `bind`
+   functions. In this call all your settings will apply.
 
    2.1. Create text label:
    ```
-   local kbdcfg = keyboard_layout.tui_layout({
-                      layouts = {
-                          {"English", "us" },
-                          {"Русский", "ru" }
-                      }
-                  })
+   local kbdcfg = keyboard_layout.tui_layout()
+   kbdcfg.add_primary_layout("English", "us")
+   kbdcfg.add_primary_layout("Русский", "ru")
+
    kbdcfg.add_additional_layout("Deutsch",  "de")
    kbdcfg.add_additional_layout("Français", "fr")
    kbdcfg.bind()
@@ -87,6 +90,8 @@ git clone https://github.com/echuraev/keyboard_layout
 `bind()` - this function applies all settings to the widget.
 ### Text label
 `switch_by_name(keymap_name)` - this function mostly use for setting additional layouts. It get keymap name of layout what should be set.
+
+`add_primary_layout(layout_name, keymap_name)` - this function adds a primary layout to the widget.
 
 `add_additional_layout(layout_name, keymap_name)` - this function adds additional layout to the widget.
 ### Graphical label

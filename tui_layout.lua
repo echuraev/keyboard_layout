@@ -30,6 +30,13 @@ function kbdcfg.switch_by_name(keymap_name)
   os.execute( kbdcfg.cmd .. " " .. keymap_name .. " " )
 end
 
+function kbdcfg.add_primary_layout(layout_name, keymap_name)
+    if kbdcfg.layouts ~= nil then
+        table.insert(kbdcfg.layouts, {layout_name, keymap_name})
+    else
+        kbdcfg.layouts = {{layout_name, keymap_name}}
+    end
+end
 
 function kbdcfg.add_additional_layout(layout_name, keymap_name)
     if kbdcfg.additional_layouts ~= nil then
@@ -49,22 +56,22 @@ function kbdcfg.bind()
     end
     kbdcfg.menu = awful.menu({ items = menu_items })
     kbdcfg.widget = wibox.widget.textbox()
-    kbdcfg.switch_by_name(kbdcfg.layouts[kbdcfg.current][2])
+
+    local current_layout = kbdcfg.layouts[kbdcfg.current]
+    if current_layout then
+        kbdcfg.switch_by_name(current_layout[2])
+    end
 end
 
 local function factory(args)
     local args                   = args or {}
     kbdcfg.cmd                   = args.cmd or "setxkbmap"
-    kbdcfg.additional_layouts    = nil
+    kbdcfg.layouts               = args.layouts or {}
+    kbdcfg.additional_layouts    = args.additional_layouts or {}
     kbdcfg.current               = args.current or 1
     kbdcfg.menu                  = nil
 
-    if args.layouts then
-        kbdcfg.layouts = args.layouts
-    end
-
-    kbdcfg.additional_layouts = { kbdcfg.layouts[1] }
-    for i = 2, #kbdcfg.layouts do
+    for i = 1, #kbdcfg.layouts do
         table.insert(kbdcfg.additional_layouts, kbdcfg.layouts[i])
     end
 
