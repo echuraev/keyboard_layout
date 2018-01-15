@@ -27,11 +27,11 @@ git clone https://github.com/echuraev/keyboard_layout
    2.1. Create text label:
    ```
    local kbdcfg = keyboard_layout.tui_layout()
-   kbdcfg.add_primary_layout("English", "us")
-   kbdcfg.add_primary_layout("Русский", "ru")
+   kbdcfg.add_primary_layout("English", "US", "us")
+   kbdcfg.add_primary_layout("Русский", "RU", "ru")
 
-   kbdcfg.add_additional_layout("Deutsch",  "de")
-   kbdcfg.add_additional_layout("Français", "fr")
+   kbdcfg.add_additional_layout("Deutsch",  "DE", "de")
+   kbdcfg.add_additional_layout("Français", "FR", "fr")
    kbdcfg.bind()
    ```
    2.2. Create graphical label:
@@ -93,9 +93,9 @@ git clone https://github.com/echuraev/keyboard_layout
 layouts. It gets a layout name (first parameter of `add_xxxx_layout()` of layout
 that should be set.
 
-`add_primary_layout(layout_name, keymap_name)` - this function adds a primary layout to the widget.
+`add_primary_layout(name, label, subcmd)` - this function adds a primary layout to the widget.
 
-`add_additional_layout(layout_name, keymap_name)` - this function adds additional layout to the widget.
+`add_additional_layout(name, label, subcmd)` - this function adds additional layout to the widget.
 ### Graphical label
 `switch_by_name(keymap_name, layout_image)` - this function mostly use for setting additional layouts. It get keymap name of layout what should be set.
 

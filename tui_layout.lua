@@ -33,21 +33,23 @@ function kbdcfg.switch(layout)
         end
     end
 
-    kbdcfg.widget:set_text(" " .. layout.keymap .. " ")
-    os.execute(kbdcfg.cmd .. " " .. layout.keymap)
+    kbdcfg.widget:set_text(" " .. layout.label .. " ")
+    os.execute(kbdcfg.cmd .. " " .. layout.subcmd)
 end
 
-function kbdcfg.add_primary_layout(layout_name, keymap_name)
-    local layout = { name   = layout_name,
-                     keymap = keymap_name };
+function kbdcfg.add_primary_layout(name, label, subcmd)
+    local layout = { name   = name,
+                     label  = label,
+                     subcmd = subcmd };
 
     table.insert(kbdcfg.layouts, layout)
     table.insert(kbdcfg.additional_layouts, layout)
 end
 
-function kbdcfg.add_additional_layout(layout_name, keymap_name)
-    local layout = { name   = layout_name,
-                     keymap = keymap_name };
+function kbdcfg.add_additional_layout(name, label, subcmd)
+    local layout = { name   = name,
+                     label  = label,
+                     subcmd = subcmd };
 
     table.insert(kbdcfg.additional_layouts, layout)
 end
