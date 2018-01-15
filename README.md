@@ -50,7 +50,7 @@ git clone https://github.com/echuraev/keyboard_layout
    ```
    -- Mouse bindings
    kbdcfg.widget:buttons(
-    awful.util.table.join(awful.button({ }, 1, function () kbdcfg.switch() end),
+    awful.util.table.join(awful.button({ }, 1, function () kbdcfg.switch_next() end),
                           awful.button({ }, 3, function () kbdcfg.menu:toggle() end))
    )
    ```
@@ -58,9 +58,9 @@ git clone https://github.com/echuraev/keyboard_layout
    ```
    globalkeys = awful.util.table.join(globalkeys,
        -- Shift-Alt to change keyboard layout
-       awful.key({"Shift"}, "Alt_L", function () kbdcfg.switch() end),
+       awful.key({"Shift"}, "Alt_L", function () kbdcfg.switch_next() end),
        -- Alt-Shift to change keyboard layout
-       awful.key({"Mod1"}, "Shift_L", function () kbdcfg.switch() end)
+       awful.key({"Mod1"}, "Shift_L", function () kbdcfg.switch_next() end)
    )
    ```
 5. Add widget to your wibar:
@@ -85,11 +85,13 @@ git clone https://github.com/echuraev/keyboard_layout
    ```
 
 ## Functions
-`switch()` - this function switch one primary keyboard layout to the next primary layout.
+`switch_next()` - this function switches one primary keyboard layout to the next primary layout.
 
 `bind()` - this function applies all settings to the widget.
 ### Text label
-`switch_by_name(keymap_name)` - this function mostly use for setting additional layouts. It get keymap name of layout what should be set.
+`switch_by_name(name)` - this function is mostly used for setting additional
+layouts. It gets a layout name (first parameter of `add_xxxx_layout()` of layout
+that should be set.
 
 `add_primary_layout(layout_name, keymap_name)` - this function adds a primary layout to the widget.
 

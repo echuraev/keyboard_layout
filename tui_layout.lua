@@ -9,57 +9,65 @@ local awful = require("awful")
 local wibox = require("wibox")
 local kbdcfg = {}
 
--- Function for changing keyboard by keys
-function kbdcfg.switch()
-  kbdcfg.current = kbdcfg.current % #(kbdcfg.layouts) + 1
-  local keymap_name = kbdcfg.layouts[kbdcfg.current][2]
-  kbdcfg.widget:set_text(" " .. keymap_name .. " ")
-  os.execute( kbdcfg.cmd .. " " .. keymap_name .. " " )
+-- Function to change current layout to the next available layout
+function kbdcfg.switch_next()
+    kbdcfg.current = kbdcfg.current % #(kbdcfg.layouts) + 1
+    kbdcfg.switch(kbdcfg.layouts[kbdcfg.current])
 end
 
--- Function for changing keyboard layout by name
-function kbdcfg.switch_by_name(keymap_name)
-  kbdcfg.current = #kbdcfg.layouts
-  for i = 1, #kbdcfg.layouts do
-    if kbdcfg.layouts[i][2] == keymap_name then
-        kbdcfg.current = i
-        break
+-- Function to change current layout based on the name
+function kbdcfg.switch_by_name(name)
+    for i, layout in ipairs(kbdcfg.layouts) do
+        if layout.name == name then
+            kbdcfg.current = i
+            kbdcfg.switch(layout)
+        end
     end
-  end
-  kbdcfg.widget:set_text(" " .. keymap_name .. " ")
-  os.execute( kbdcfg.cmd .. " " .. keymap_name .. " " )
+end
+
+function kbdcfg.switch(layout)
+    for i, current in ipairs(kbdcfg.layouts) do
+        if current.name == layout.name then
+            kbdcfg.current = i
+            break
+        end
+    end
+
+    kbdcfg.widget:set_text(" " .. layout.keymap .. " ")
+    os.execute(kbdcfg.cmd .. " " .. layout.keymap)
 end
 
 function kbdcfg.add_primary_layout(layout_name, keymap_name)
-    if kbdcfg.layouts ~= nil then
-        table.insert(kbdcfg.layouts, {layout_name, keymap_name})
-    else
-        kbdcfg.layouts = {{layout_name, keymap_name}}
-    end
+    local layout = { name   = layout_name,
+                     keymap = keymap_name };
+
+    table.insert(kbdcfg.layouts, layout)
+    table.insert(kbdcfg.additional_layouts, layout)
 end
 
 function kbdcfg.add_additional_layout(layout_name, keymap_name)
-    if kbdcfg.additional_layouts ~= nil then
-        table.insert(kbdcfg.additional_layouts, {layout_name, keymap_name})
-    else
-        kbdcfg.additional_layouts = {{layout_name, keymap_name}}
-    end
+    local layout = { name   = layout_name,
+                     keymap = keymap_name };
+
+    table.insert(kbdcfg.additional_layouts, layout)
 end
 
 function kbdcfg.bind()
     -- Menu for choose additional keyboard layouts
     local menu_items = {}
+
     for i = 1, #kbdcfg.additional_layouts do
-        local layout_name  = kbdcfg.additional_layouts[i][1]
-        local keymap_name  = kbdcfg.additional_layouts[i][2]
-        table.insert(menu_items, {layout_name, function () kbdcfg.switch_by_name(keymap_name) end})
+        local layout = kbdcfg.additional_layouts[i]
+        table.insert(menu_items,
+                     {layout.name, function () kbdcfg.switch(layout) end})
     end
+
     kbdcfg.menu = awful.menu({ items = menu_items })
     kbdcfg.widget = wibox.widget.textbox()
 
     local current_layout = kbdcfg.layouts[kbdcfg.current]
     if current_layout then
-        kbdcfg.switch_by_name(current_layout[2])
+        kbdcfg.switch(current_layout)
     end
 end
 
