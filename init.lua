@@ -6,6 +6,5 @@
 --]]
 
 return {
-    gui_layout = require("keyboard_layout.gui_layout"),
-    tui_layout = require("keyboard_layout.tui_layout"),
+    kbdcfg = require("keyboard_layout.kbdcfg")
 }

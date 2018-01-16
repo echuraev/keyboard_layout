@@ -26,7 +26,8 @@ git clone https://github.com/echuraev/keyboard_layout
 
    2.1. Create text label:
    ```
-   local kbdcfg = keyboard_layout.tui_layout()
+   local kbdcfg = keyboard_layout.kbdcfg({type="tui"})
+
    kbdcfg.add_primary_layout("English", "US", "us")
    kbdcfg.add_primary_layout("Русский", "RU", "ru")
 
@@ -36,14 +37,13 @@ git clone https://github.com/echuraev/keyboard_layout
    ```
    2.2. Create graphical label:
    ```
-   local kbdcfg = keyboard_layout.gui_layout({
-                      layouts = {
-                          {"English", "us", beautiful.en_layout },
-                          {"Русский", "ru", beautiful.ru_layout }
-                      }
-                  })
-   kbdcfg.add_additional_layout("Deutsch", "de", beautiful.de_layout)
-   kbdcfg.add_additional_layout("Français", "fr", beautiful.fr_layout)
+   local kbdcfg = keyboard_layout.kbdcfg({type="gui"})
+
+   kbdcfg.add_primary_layout("English", beautiful.en_layout, "us")
+   kbdcfg.add_primary_layout("Русский", beautiful.ru_layout, "ru")
+
+   kbdcfg.add_additional_layout("Deutsch",  beautiful.de_layout, "de")
+   kbdcfg.add_additional_layout("Français", beautiful.fr_layout, "fr")
    kbdcfg.bind()
    ```
 3. Bind your mouse keys:
@@ -96,10 +96,6 @@ that should be set.
 `add_primary_layout(name, label, subcmd)` - this function adds a primary layout to the widget.
 
 `add_additional_layout(name, label, subcmd)` - this function adds additional layout to the widget.
-### Graphical label
-`switch_by_name(keymap_name, layout_image)` - this function mostly use for setting additional layouts. It get keymap name of layout what should be set.
-
-`add_additional_layout(layout_name, keymap_name, layout_image)` - this function adds additional layout to the widget.
 
 ## Screenshots
 In the beginning of both screen casts I changed layouts by keyboard shortcats and only primary layouts were switched. After that I showed how additional layouts work.

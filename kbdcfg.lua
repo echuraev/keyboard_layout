@@ -33,7 +33,12 @@ function kbdcfg.switch(layout)
         end
     end
 
-    kbdcfg.widget:set_text(" " .. layout.label .. " ")
+    if kbdcfg.type == "tui" then
+        kbdcfg.widget:set_text(" " .. layout.label .. " ")
+    else
+        kbdcfg.widget.image = layout.label
+    end
+
     os.execute(kbdcfg.cmd .. " " .. layout.subcmd)
 end
 
@@ -60,12 +65,21 @@ function kbdcfg.bind()
 
     for i = 1, #kbdcfg.additional_layouts do
         local layout = kbdcfg.additional_layouts[i]
-        table.insert(menu_items,
-                     {layout.name, function () kbdcfg.switch(layout) end})
+        table.insert(menu_items, {
+                         layout.name,
+                         function () kbdcfg.switch(layout) end,
+                         -- show a fancy image in gui mode
+                         kbdcfg.type == "gui" and layout.label or nil
+        })
     end
 
     kbdcfg.menu = awful.menu({ items = menu_items })
-    kbdcfg.widget = wibox.widget.textbox()
+
+    if kbdcfg.type == "tui" then
+        kbdcfg.widget = wibox.widget.textbox()
+    else
+        kbdcfg.widget = wibox.widget.imagebox()
+    end
 
     local current_layout = kbdcfg.layouts[kbdcfg.current]
     if current_layout then
@@ -80,6 +94,7 @@ local function factory(args)
     kbdcfg.additional_layouts    = args.additional_layouts or {}
     kbdcfg.current               = args.current or 1
     kbdcfg.menu                  = nil
+    kbdcfg.type                  = args.type or "tui"
 
     for i = 1, #kbdcfg.layouts do
         table.insert(kbdcfg.additional_layouts, kbdcfg.layouts[i])
@@ -90,4 +105,6 @@ local function factory(args)
     return kbdcfg
 end
 
-return setmetatable(kbdcfg, { __call = function(_, ...) return factory(...) end })
+setmetatable(kbdcfg, { __call = function(_, ...) return factory(...) end })
+
+return kbdcfg
