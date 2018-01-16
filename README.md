@@ -106,7 +106,7 @@ command. The last layout in the example uses the
 `switch_next()` - this function switches one primary keyboard layout to the next primary layout.
 
 `bind()` - this function applies all settings to the widget.
-### Text label
+
 `switch_by_name(name)` - this function is mostly used for setting additional
 layouts. It gets a layout name (first parameter of `add_xxxx_layout()` of layout
 that should be set.
