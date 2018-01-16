@@ -17,37 +17,40 @@ git clone https://github.com/echuraev/keyboard_layout
    ```
    local keyboard_layout = require("keyboard_layout")
    ```
-2. Create instance of keyboard widget. You can choose between text and graphical layout label, see below. Primary layout you can set by passing it to the `tui_layout` or `gui_layout` functions. After, you can call some other functions e.g. `add_additional_layout` for setting some additional layouts. And when you add all necessary options to `kbdcfg` then you have to call `bind` functions. In this call all your settings will apply.
+
+2. Create instance of keyboard widget. You can choose between text and graphical
+   layout label, see below. Primary and Additional layouts can be set by
+   `add_primary_layout` and `add_additional_layout` respectively. And when you
+   add all necessary options to `kbdcfg` then you have to call `bind`
+   functions. In this call all your settings will apply.
 
    2.1. Create text label:
    ```
-   local kbdcfg = keyboard_layout.tui_layout({
-                      layouts = {
-                          {"English", "us" },
-                          {"Русский", "ru" }
-                      }
-                  })
-   kbdcfg.add_additional_layout("Deutsch",  "de")
-   kbdcfg.add_additional_layout("Français", "fr")
+   local kbdcfg = keyboard_layout.kbdcfg({type="tui"})
+
+   kbdcfg.add_primary_layout("English", "US", "us")
+   kbdcfg.add_primary_layout("Русский", "RU", "ru")
+
+   kbdcfg.add_additional_layout("Deutsch",  "DE", "de")
+   kbdcfg.add_additional_layout("Français", "FR", "fr")
    kbdcfg.bind()
    ```
    2.2. Create graphical label:
    ```
-   local kbdcfg = keyboard_layout.gui_layout({
-                      layouts = {
-                          {"English", "us", beautiful.en_layout },
-                          {"Русский", "ru", beautiful.ru_layout }
-                      }
-                  })
-   kbdcfg.add_additional_layout("Deutsch", "de", beautiful.de_layout)
-   kbdcfg.add_additional_layout("Français", "fr", beautiful.fr_layout)
+   local kbdcfg = keyboard_layout.kbdcfg({type="gui"})
+
+   kbdcfg.add_primary_layout("English", beautiful.en_layout, "us")
+   kbdcfg.add_primary_layout("Русский", beautiful.ru_layout, "ru")
+
+   kbdcfg.add_additional_layout("Deutsch",  beautiful.de_layout, "de")
+   kbdcfg.add_additional_layout("Français", beautiful.fr_layout, "fr")
    kbdcfg.bind()
    ```
 3. Bind your mouse keys:
    ```
    -- Mouse bindings
    kbdcfg.widget:buttons(
-    awful.util.table.join(awful.button({ }, 1, function () kbdcfg.switch() end),
+    awful.util.table.join(awful.button({ }, 1, function () kbdcfg.switch_next() end),
                           awful.button({ }, 3, function () kbdcfg.menu:toggle() end))
    )
    ```
@@ -55,9 +58,9 @@ git clone https://github.com/echuraev/keyboard_layout
    ```
    globalkeys = awful.util.table.join(globalkeys,
        -- Shift-Alt to change keyboard layout
-       awful.key({"Shift"}, "Alt_L", function () kbdcfg.switch() end),
+       awful.key({"Shift"}, "Alt_L", function () kbdcfg.switch_next() end),
        -- Alt-Shift to change keyboard layout
-       awful.key({"Mod1"}, "Shift_L", function () kbdcfg.switch() end)
+       awful.key({"Mod1"}, "Shift_L", function () kbdcfg.switch_next() end)
    )
    ```
 5. Add widget to your wibar:
@@ -81,18 +84,36 @@ git clone https://github.com/echuraev/keyboard_layout
    }
    ```
 
+## How to use a different layout switch command
+
+By default the widget uses `setxkbmap` command to switch keyboard layouts. The
+following parameters allow it to use a non-standard layout switcher, for example
+the [Fcitx](https://github.com/fcitx/fcitx) for Chinese/Japanese/Korean input:
+
+```
+local kbdcfg = keyboard_layout.kbdcfg({cmd = "fcitx-remote -s", type="tui"})
+
+kbdcfg.add_primary_layout("English",  "us", "fcitx-keyboard-us")
+kbdcfg.add_primary_layout("Russian",  "ru", "fcitx-keyboard-ru-ruu")
+kbdcfg.add_primary_layout("Japanese", "ja", "mozc")
+```
+
+Note, that you should pass a valid input method name to `fcitx-remote`
+command. The last layout in the example uses the
+[Mozc](https://github.com/google/mozc) as an input method for Japanese input.
+
 ## Functions
-`switch()` - this function switch one primary keyboard layout to the next primary layout.
+`switch_next()` - this function switches one primary keyboard layout to the next primary layout.
 
 `bind()` - this function applies all settings to the widget.
 ### Text label
-`switch_by_name(keymap_name)` - this function mostly use for setting additional layouts. It get keymap name of layout what should be set.
+`switch_by_name(name)` - this function is mostly used for setting additional
+layouts. It gets a layout name (first parameter of `add_xxxx_layout()` of layout
+that should be set.
 
-`add_additional_layout(layout_name, keymap_name)` - this function adds additional layout to the widget.
-### Graphical label
-`switch_by_name(keymap_name, layout_image)` - this function mostly use for setting additional layouts. It get keymap name of layout what should be set.
+`add_primary_layout(name, label, subcmd)` - this function adds a primary layout to the widget.
 
-`add_additional_layout(layout_name, keymap_name, layout_image)` - this function adds additional layout to the widget.
+`add_additional_layout(name, label, subcmd)` - this function adds additional layout to the widget.
 
 ## Screenshots
 In the beginning of both screen casts I changed layouts by keyboard shortcats and only primary layouts were switched. After that I showed how additional layouts work.
