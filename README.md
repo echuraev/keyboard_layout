@@ -84,6 +84,24 @@ git clone https://github.com/echuraev/keyboard_layout
    }
    ```
 
+## How to use a different layout switch command
+
+By default the widget uses `setxkbmap` command to switch keyboard layouts. The
+following parameters allow it to use a non-standard layout switcher, for example
+the [Fcitx](https://github.com/fcitx/fcitx) for Chinese/Japanese/Korean input:
+
+```
+local kbdcfg = keyboard_layout.kbdcfg({cmd = "fcitx-remote -s", type="tui"})
+
+kbdcfg.add_primary_layout("English",  "us", "fcitx-keyboard-us")
+kbdcfg.add_primary_layout("Russian",  "ru", "fcitx-keyboard-ru-ruu")
+kbdcfg.add_primary_layout("Japanese", "ja", "mozc")
+```
+
+Note, that you should pass a valid input method name to `fcitx-remote`
+command. The last layout in the example uses the
+[Mozc](https://github.com/google/mozc) as an input method for Japanese input.
+
 ## Functions
 `switch_next()` - this function switches one primary keyboard layout to the next primary layout.
 
