@@ -102,6 +102,22 @@ Note, that you should pass a valid input method name to `fcitx-remote`
 command. The last layout in the example uses the
 [Mozc](https://github.com/google/mozc) as an input method for Japanese input.
 
+## How to keep chosen layout per window
+
+If you wish to remember selected layout per window set `remember_layout` parameter while creating instance of the plugin:
+
+```
+local kbdcfg = keyboard_layout.kbdcfg({remember_layout=true})
+```
+
+You can also set default layout for new windows with `default_layout_index` variable like that:
+
+```
+local kbdcfg = keyboard_layout.kbdcfg({remember_layout=true, default_layout_index=1})
+```
+
+Index depends on your `kbdcfg.add_primary_layout` calls.
+
 ## Functions
 `switch_next()` - this function switches one primary keyboard layout to the next primary layout.
 
@@ -132,4 +148,3 @@ MIT
 
 ## Flags icons
 Icon with British flag I take from here: https://www.gosquared.com/resources/flag-icons/
-
