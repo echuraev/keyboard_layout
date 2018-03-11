@@ -33,6 +33,11 @@ function kbdcfg.switch(layout)
         end
     end
 
+    if client.focus then
+        local layout = kbdcfg.layouts[kbdcfg.current]
+        client.focus.kbd_layout = layout.name
+    end
+
     if kbdcfg.type == "tui" then
         kbdcfg.widget:set_text(" " .. layout.label .. " ")
     else
@@ -59,6 +64,18 @@ function kbdcfg.add_additional_layout(name, label, subcmd)
     table.insert(kbdcfg.additional_layouts, layout)
 end
 
+function kbd_client_update(c)
+    if not c then
+        return
+    end
+
+    if not c.kbd_layout then
+        c.kbd_layout = kbdcfg.layouts[kbdcfg.default_layout_index].name
+    end
+
+    kbdcfg.switch_by_name(c.kbd_layout)
+end
+
 function kbdcfg.bind()
     -- Menu for choose additional keyboard layouts
     local menu_items = {}
@@ -81,6 +98,15 @@ function kbdcfg.bind()
         kbdcfg.widget = wibox.widget.imagebox()
     end
 
+    if kbdcfg.default_layout_index > #kbdcfg.layouts then
+        kbdcfg.default_layout_index = 1;
+        kbdcfg.current = kbdcfg.default_layout_index;
+    end
+
+    if kbdcfg.remember_layout then
+        client.connect_signal("focus", kbd_client_update)
+    end
+
     local current_layout = kbdcfg.layouts[kbdcfg.current]
     if current_layout then
         kbdcfg.switch(current_layout)
@@ -92,15 +118,15 @@ local function factory(args)
     kbdcfg.cmd                   = args.cmd or "setxkbmap"
     kbdcfg.layouts               = args.layouts or {}
     kbdcfg.additional_layouts    = args.additional_layouts or {}
-    kbdcfg.current               = args.current or 1
+    kbdcfg.default_layout_index  = args.default_layout_index or 1
+    kbdcfg.current               = args.current or kbdcfg.default_layout_index
     kbdcfg.menu                  = nil
     kbdcfg.type                  = args.type or "tui"
+    kbdcfg.remember_layout       = args.remember_layout or false
 
     for i = 1, #kbdcfg.layouts do
         table.insert(kbdcfg.additional_layouts, kbdcfg.layouts[i])
     end
-
-    kbdcfg.bind()
 
     return kbdcfg
 end
