@@ -15,26 +15,29 @@ function kbdcfg.switch_next()
     kbdcfg.switch(kbdcfg.layouts[kbdcfg.current])
 end
 
--- Function to change current layout based on the name
-function kbdcfg.switch_by_name(name)
-    for i, layout in ipairs(kbdcfg.layouts) do
+-- Function to find layout in list and set current index
+local function find_current_layout(name)
+    for index, layout in ipairs(kbdcfg.additional_layouts) do
         if layout.name == name then
-            kbdcfg.current = i
-            kbdcfg.switch(layout)
+            return index, layout
         end
     end
+    return nil, nil
 end
 
+-- Function to change current layout based on the name
+function kbdcfg.switch_by_name(name)
+    local index, layout = find_current_layout(name)
+    kbdcfg.switch(layout)
+end
+
+-- Function to change layout
 function kbdcfg.switch(layout)
-    for i, current in ipairs(kbdcfg.layouts) do
-        if current.name == layout.name then
-            kbdcfg.current = i
-            break
-        end
-    end
+    local index = find_current_layout(layout.name)
+    kbdcfg.current = index
 
     if client.focus then
-        local layout = kbdcfg.layouts[kbdcfg.current]
+        local layout = kbdcfg.additional_layouts[kbdcfg.current]
         client.focus.kbd_layout = layout.name
     end
 
@@ -47,6 +50,7 @@ function kbdcfg.switch(layout)
     os.execute(kbdcfg.cmd .. " " .. layout.subcmd)
 end
 
+-- Function to add primary layouts
 function kbdcfg.add_primary_layout(name, label, subcmd)
     local layout = { name   = name,
                      label  = label,
@@ -56,6 +60,7 @@ function kbdcfg.add_primary_layout(name, label, subcmd)
     table.insert(kbdcfg.additional_layouts, layout)
 end
 
+-- Function to add additional layouts
 function kbdcfg.add_additional_layout(name, label, subcmd)
     local layout = { name   = name,
                      label  = label,
@@ -64,18 +69,7 @@ function kbdcfg.add_additional_layout(name, label, subcmd)
     table.insert(kbdcfg.additional_layouts, layout)
 end
 
-function kbd_client_update(c)
-    if not c then
-        return
-    end
-
-    if not c.kbd_layout then
-        c.kbd_layout = kbdcfg.layouts[kbdcfg.default_layout_index].name
-    end
-
-    kbdcfg.switch_by_name(c.kbd_layout)
-end
-
+-- Bind function. Applies all settings to the widget
 function kbdcfg.bind()
     -- Menu for choose additional keyboard layouts
     local menu_items = {}
@@ -113,6 +107,20 @@ function kbdcfg.bind()
     end
 end
 
+-- Callback function for set remembering layout for windows
+function kbd_client_update(c)
+    if not c then
+        return
+    end
+
+    if not c.kbd_layout then
+        c.kbd_layout = kbdcfg.layouts[kbdcfg.default_layout_index].name
+    end
+
+    kbdcfg.switch_by_name(c.kbd_layout)
+end
+
+-- Factory function. Creates the widget.
 local function factory(args)
     local args                   = args or {}
     kbdcfg.cmd                   = args.cmd or "setxkbmap"
