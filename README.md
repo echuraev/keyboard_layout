@@ -38,7 +38,7 @@ Screenshot section.
 ## Installing
 Clone this repository to your Awesome WM configuration directory:
 ```bash
-cd ~/.configs/awesome
+cd ~/.config/awesome
 git clone https://github.com/echuraev/keyboard_layout
 ```
 
