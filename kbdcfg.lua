@@ -47,7 +47,7 @@ function kbdcfg.switch(layout)
         kbdcfg.widget.image = layout.label
     end
 
-    os.execute(kbdcfg.cmd .. " " .. layout.subcmd)
+    os.execute(kbdcfg.cmd .. " \"" .. layout.subcmd .. "\"")
 end
 
 -- Function to add primary layouts
