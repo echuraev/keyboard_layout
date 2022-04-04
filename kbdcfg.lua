@@ -42,7 +42,11 @@ function kbdcfg.switch(layout)
     end
 
     if kbdcfg.type == "tui" then
-        kbdcfg.widget:set_text(" " .. layout.label .. " ")
+        if not kbdcfg.no_tui_margin then
+            kbdcfg.widget:set_text(" " .. layout.label .. " ")
+        else
+            kbdcfg.widget:set_text(layout.label)
+        end
     else
         kbdcfg.widget.image = layout.label
     end
@@ -130,6 +134,7 @@ local function factory(args)
     kbdcfg.current               = args.current or kbdcfg.default_layout_index
     kbdcfg.menu                  = nil
     kbdcfg.type                  = args.type or "tui"
+    kbdcfg.no_tui_margin         = args.no_tui_margin or false
     kbdcfg.remember_layout       = args.remember_layout or false
 
     for i = 1, #kbdcfg.layouts do
