@@ -175,7 +175,7 @@ local kbdcfg = keyboard_layout.kbdcfg({
 
 The example given should result in something kinda like this:
 
-![Screenshot of the widget accompanied by a nerd font keyboard icon on the left](tui_wrap_configuration.png)
+![Screenshot of the widget accompanied by a nerd font keyboard icon on the left](docs/tui_wrap_configuration.png)
 
 ## Screenshots
 In the beginning of both screen casts I changed layouts by keyboard shortcats
@@ -183,10 +183,10 @@ and only primary layouts were switched. After that I showed how additional
 layouts work.
 
 Usage of gui_layout:
-![Usage of gui_layout.gif](gui_usage.gif)
+![Usage of gui_layout.gif](docs/gui_usage.gif)
 
 Usage of tui_layout
-![Usage of tui_layout.gif](tui_usage.gif)
+![Usage of tui_layout.gif](docs/tui_usage.gif)
 
 ## References
 ### Author
