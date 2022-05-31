@@ -42,7 +42,7 @@ function kbdcfg.switch(layout)
     end
 
     if kbdcfg.type == "tui" then
-        kbdcfg.widget:set_text(" " .. layout.label .. " ")
+        kbdcfg.widget:set_text(kbdcfg.tui_wrap_left .. layout.label .. kbdcfg.tui_wrap_right)
     else
         kbdcfg.widget.image = layout.label
     end
@@ -130,6 +130,8 @@ local function factory(args)
     kbdcfg.current               = args.current or kbdcfg.default_layout_index
     kbdcfg.menu                  = nil
     kbdcfg.type                  = args.type or "tui"
+    kbdcfg.tui_wrap_left         = args.tui_wrap_left  or " "
+    kbdcfg.tui_wrap_right        = args.tui_wrap_right or " "
     kbdcfg.remember_layout       = args.remember_layout or false
 
     for i = 1, #kbdcfg.layouts do
