@@ -130,9 +130,8 @@ local function factory(args)
     kbdcfg.current               = args.current or kbdcfg.default_layout_index
     kbdcfg.menu                  = nil
     kbdcfg.type                  = args.type or "tui"
-    kbdcfg.tui_wrap              = args.tui_wrap or " "
-    kbdcfg.tui_wrap_left         = args.tui_wrap_left  or kbdcfg.tui_wrap
-    kbdcfg.tui_wrap_right        = args.tui_wrap_right or kbdcfg.tui_wrap
+    kbdcfg.tui_wrap_left         = args.tui_wrap_left  or " "
+    kbdcfg.tui_wrap_right        = args.tui_wrap_right or " "
     kbdcfg.remember_layout       = args.remember_layout or false
 
     for i = 1, #kbdcfg.layouts do
