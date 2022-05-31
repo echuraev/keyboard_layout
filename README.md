@@ -21,6 +21,7 @@ Screenshot section.
     * [Options](#options)
     * [Functions](#functions)
     * [How to use a different layout switch command](#how-to-use-a-different-layout-switch-command)
+    * [TUI wrap configuration](#tui-wrap-configuration)
 * [Screenshots](#screenshots)
 * [References](#references)
     * [Author](#author)
@@ -125,6 +126,8 @@ The following options you can pass to create function:
 * `default_layout_index` - set index of default layout. Default: `1`
 * `remember_layout` - to remember selected layout per window set it to `true`.
     Default: `false`
+* `tui_wrap_left`, `tui_wrap_right` - allows you to customise the wrapping
+    around the `tui` version of the widget. Default: `" "`
 
 ### Functions
 * `switch_next()` - this function switches one primary keyboard layout to the
@@ -155,6 +158,24 @@ kbdcfg.add_primary_layout("Japanese", "ja", "mozc")
 Note, that you should pass a valid input method name to `fcitx-remote`
 command. The last layout in the example uses the
 [Mozc](https://github.com/google/mozc) as an input method for Japanese input.
+
+### TUI wrap configuration
+
+By default, the `tui` version adds a `" "` wrapping around the widget as a
+margin. In certain cases however, this might not be what you want. To change
+the wrapping around the widget, modify your config as such:
+
+```lua
+local kbdcfg = keyboard_layout.kbdcfg({
+    type = "tui",
+    tui_wrap_right = "",  -- wrapping on the right
+    tui_wrap_left = " "  -- wrapping on the left
+})
+```
+
+The example given should result in something kinda like this:
+
+![Screenshot of the widget accompanied by a nerd font keyboard icon on the left](tui_wrap_configuration.png)
 
 ## Screenshots
 In the beginning of both screen casts I changed layouts by keyboard shortcats
