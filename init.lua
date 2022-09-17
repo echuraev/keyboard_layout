@@ -4,7 +4,6 @@
      * (c) 2017, Egor Churaev egor.churaev@gmail.com
 
 --]]
-
 return {
-    kbdcfg = require("keyboard_layout.kbdcfg")
+    kbdcfg = require(... .. ".kbdcfg")
 }
